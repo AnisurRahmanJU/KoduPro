@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লেভেল ৩: খেলনার বিশাল ঝুড়ি (Array)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #e8f5e9; min-height: 100vh; padding: 30px; display: flex; align-items: center; justify-content: center; }
+        .game-wrapper { display: flex; width: 1200px; height: 680px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); overflow: hidden; }
+        .story-side { flex: 1.2; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-right: 2px solid #f0f0f0; overflow-y: auto; }
+        .code-side { flex: 1; padding: 40px; background: #1e1e24; color: #f8f8f2; display: flex; flex-direction: column; justify-content: space-between; }
+        .level-badge { align-self: flex-start; background: #2e7d32; color: white; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; margin-bottom: 20px; }
+        .kodu-avatar { display: flex; align-items: center; gap: 20px; background: #e8f5e9; padding: 20px; border-radius: 20px; margin-bottom: 25px; }
+        .kodu-icon { font-size: 55px; color: #2e7d32; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .story-text h2 { color: #2c3e50; margin-bottom: 15px; font-size: 1.8rem; }
+        .story-text p { color: #546e7a; font-size: 1.1rem; line-height: 1.6; }
+        .step-dots { display: flex; gap: 10px; margin: 20px 0; }
+        .dot { width: 15px; height: 15px; border-radius: 50%; background: #e0e0e0; transition: all 0.3s; }
+        .dot.active { background: #2e7d32; transform: scale(1.2); }
+        .dot.completed { background: #2ed573; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .code-header h3 { font-size: 1.2rem; color: #ff79c6; }
+        .hint-box { background: #282a36; padding: 12px; border-radius: 8px; font-size: 0.95rem; color: #f1fa8c; border-left: 4px solid #f1fa8c; margin-bottom: 15px; }
+        textarea { width: 100%; flex-grow: 1; background: #282a36; color: #50fa7b; border: 2px solid #44475a; border-radius: 12px; padding: 20px; font-family: 'Courier New', monospace; font-size: 1.2rem; resize: none; outline: none; transition: border 0.3s; }
+        textarea:focus { border-color: #ff79c6; }
+        .btn-container { display: flex; gap: 15px; margin-top: 20px; }
+        button { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-run { background: #2ed573; color: white; }
+        .btn-run:hover { background: #26af5f; }
+        .btn-next { background: #ff9f43; color: white; display: none; }
+        .btn-next:hover { background: #e68a2e; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
+        .feedback.success { background: rgba(46, 213, 115, 0.2); color: #2ed573; border: 1px solid #2ed573; }
+        .feedback.error { background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid #ff4757; }
+        .back-btn { text-decoration: none; color: #78909c; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+        .back-btn:hover { color: #2e7d32; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="story-side">
+            <div>
+                <div class="level-badge">লেভেল ৩</div>
+                <div class="kodu-avatar">
+                    <div class="kodu-icon"><i class="fa-solid fa-list-ol"></i></div>
+                    <div id="koduDialogue" style="font-size: 1.1rem; color: #37474f; font-weight: bold;"></div>
+                </div>
+                <div class="story-text">
+                    <h2 id="stepTitle"></h2>
+                    <p id="stepDescription"></p>
+                </div>
+            </div>
+            <div>
+                <div class="step-dots" id="stepDots"></div>
+                <a href="index.html" class="back-btn"><i class="fa-solid fa-house"></i> প্রধান ড্যাশবোর্ডে ফিরে যাও</a>
+            </div>
+        </div>
+
+        <div class="code-side">
+            <div class="code-header">
+                <h3><i class="fa-solid fa-scroll"></i> জাদুর কোড বুক</h3>
+                <span id="stepProgress" style="color: #6272a4; font-weight: bold;">ধাপ ১/৩</span>
+            </div>
+            <div class="hint-box" id="hintBox"></div>
+            <textarea id="codeEditor" spellcheck="false" placeholder="এখানে তোমার কোড লেখো..."></textarea>
+            <div id="feedbackBox" class="feedback"></div>
+            <div class="btn-container">
+                <button class="btn-run" onclick="checkStep()"><i class="fa-solid fa-play"></i> রান করো!</button>
+                <button class="btn-next" id="nextBtn" onclick="nextStep()">পরবর্তী ধাপ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                "kodu": "মিনু তার সব খেলনা ঘরের মেঝেতে ছড়িয়ে রেখেছে। চলো ৩টি আলাদা বাক্স না বানিয়ে, ১টি মাত্র জাদুর 'ঝুড়ি' বা Array তেই ৩টি খেলনার সাইজ যথাক্রমে ১০, ২০, ৩০ সাজিয়ে রাখি!",
+                "title": "ধাপ ১: সংখ্যার ঝুড়ি (Int Array)",
+                "desc": "একসাথে অনেক সংখ্যা রাখার জন্য থার্ড ব্র্যাকেট [] ব্যবহার করে অ্যারে বানানো হয়।",
+                "hint": "সংখ্যা ঝুড়ি[] = [১০, ২০, ৩০];",
+                "placeholder": "সংখ্যা ঝুড়ি[] = [১০, ২০, ৩০];"
+            },
+            {
+                "kodu": "দারুণ! এবার আমাদের জাদুর তোতা পাখির নাম মনে রাখতে হবে। অক্ষর দিয়ে তো নাম হয় না, ওটা অক্ষরের দল বা 'Char Array'!",
+                "title": "ধাপ ২: নামের অক্ষরের মালা (Char Array / String)",
+                "desc": "অক্ষরের দল বা শব্দকে ডابل কোটেশনে রাখা হয়। তোতার নাম দাও 'Kodu'।",
+                "hint": "অক্ষর তোতা[] = 'Kodu';",
+                "placeholder": "অক্ষর তোতা[] = 'Kodu';"
+            },
+            {
+                "kodu": "এবার ঝুড়ি থেকে প্রথম খেলনাটি বের করতে হবে। মনে রেখো বন্ধু, কম্পিউটারের গণনা কিন্তু শুরু হয় ০ (শূন্য) থেকে!",
+                "title": "ধাপ ৩: ঝুড়ি থেকে জিনিস বের করা (Accessing Array)",
+                "desc": "ঝুড়ির প্রথম উপাদান দেখতে হলে ঝুড়ি[০] লিখতে হবে। চলো প্রথম খেলনাটি 'প্রথম' নামক চলকে রাখি।",
+                "hint": "সংখ্যা প্রথম = ঝুড়ি[০];",
+                "placeholder": "সংখ্যা প্রথম = ঝুড়ি[০];"
+            }
+        ];
+
+        let currentStep = 0;
+
+        function loadStep() {
+            const data = steps[currentStep];
+            document.getElementById('koduDialogue').innerText = data.kodu;
+            document.getElementById('stepTitle').innerText = data.title;
+            document.getElementById('stepDescription').innerText = data.desc;
+            document.getElementById('hintBox').innerHTML = "<b>💡 সূত্র:</b> " + data.hint;
+            document.getElementById('codeEditor').value = "";
+            document.getElementById('codeEditor').placeholder = data.placeholder;
+            document.getElementById('stepProgress').innerText = `ধাপ ${currentStep + 1}/${steps.length}`;
+            document.getElementById('feedbackBox').style.display = "none";
+            document.getElementById('nextBtn').style.display = "none";
+            
+            const dotsContainer = document.getElementById('stepDots');
+            dotsContainer.innerHTML = "";
+            for(let i=0; i<steps.length; i++) {
+                let dot = document.createElement('div');
+                dot.className = "dot " + (i === currentStep ? "active" : (i < currentStep ? "completed" : ""));
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function checkStep() {
+            const code = document.getElementById('codeEditor').value.trim();
+            const feedbackBox = document.getElementById('feedbackBox');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if(!code) {
+                feedbackBox.className = "feedback error";
+                feedbackBox.innerText = "❌ আগে খালি জায়গায় তোমার জাদুর মন্ত্রটি লেখো!";
+                feedbackBox.style.display = "block";
+                return;
+            }
+
+            const result = validateCode(currentStep, code);
+            
+            if(result.success) {
+                feedbackBox.className = "feedback success";
+                feedbackBox.innerHTML = "🎉 চমৎকার! " + result.msg;
+                feedbackBox.style.display = "block";
+                nextBtn.style.display = "block";
+                confetti();
+            } else {
+                feedbackBox.className = "feedback error";
+                feedbackBox.innerHTML = "❌ উফ! " + result.msg;
+                feedbackBox.style.display = "block";
+            }
+        }
+
+        function nextStep() {
+            currentStep++;
+            if(currentStep < steps.length) {
+                loadStep();
+            } else {
+                alert("🏆 জিন্দাবাদ! তুমি সফলভাবে Array ঝুড়ির ব্যবহার শিখে গেছ!");
+                window.location.href = "conditional.html";
+            }
+        }
+
+        function validateCode(step, code) {
+            const clean = code.replace(/[০0]/g, '0').replace(/[১1]/g, '1').replace(/[২2]/g, '2').replace(/[৩3]/g, '3');
+            if (step === 0) {
+                if (/সংখ্যা\s+ঝুড়ি\[\s*\]\s*=\s*\[\s*10\s*,\s*20\s*,\s*30\s*\]\s*;/.test(clean)) return { success: true, msg: "সব খেলনা ঝুড়িতে গুছানো সম্পন্ন!" };
+            } else if (step === 1) {
+                if (/অক্ষর\s+তোতা\[\s*\]\s*=\s*['"]Kodu['"]\s*;/.test(code)) return { success: true, msg: "তোতা নিজের নাম চিনে গেছে!" };
+            } else if (step === 2) {
+                if (/সংখ্যা\s+প্রথম\s*=\s*ঝুড়ি\[\s*0\s*\]\s*;/.test(clean)) return { success: true, msg: "প্রথম খেলনা বের করা সফল!" };
+            }
+            return { success: false, msg: "কোড কাজ করেনি বন্ধু। কমা বা ব্র্যাকেট চেক করো।" };
+        }
+
+        loadStep();
+    </script>
+</body>
+</html>
