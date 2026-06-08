@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>কোডুর জাদুর জগত - ছোটদের প্রোগ্রামিং প্ল্যাটফর্ম</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&family=Galada&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ecf7 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .header {
+            font-family: 'Galada', cursive;
+            color: #4a148c;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .subtitle {
+            font-size: 1.3rem;
+            color: #616161;
+            margin-bottom: 50px;
+        }
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 10px;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            padding: 30px 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(74, 20, 140, 0.1);
+            border-color: #7b1fa2;
+        }
+        .icon-box {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 20px;
+            background: #f3e5f5;
+            color: #7b1fa2;
+            transition: all 0.3s;
+        }
+        .card:hover .icon-box {
+            transform: scale(1.1);
+            background: #7b1fa2;
+            color: white;
+        }
+        .card h3 {
+            font-size: 1.4rem;
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: #757575;
+            line-height: 1.5;
+        }
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e0e0e0;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #616161;
+        }
+        .card:hover .badge {
+            background: #7b1fa2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="header">কোডুর জাদুর জগত ✨</h1>
+        <p class="subtitle">গল্পে গল্পে কার্টুনের সাথে শেখো নিজের ভাষায় অ্যাডভান্সড কোডিং!</p>
+
+        <div class="map-grid">
+            <a href="variable.html" class="card">
+                <span class="badge">Level 1</span>
+                <div class="icon-box"><i class="fa-solid fa-box-open"></i></div>
+                <h3>জাদুর বাক্স বা চলক</h3>
+                <p>কোডু আর মিনুর সাথে ডেটা জমিয়ে রাখার প্রথম জাদুর বাক্স বা Variable তৈরি করো।</p>
+            </a>
+
+            <a href="datatype.html" class="card">
+                <span class="badge">Level 2</span>
+                <div class="icon-box"><i class="fa-solid fa-cubes"></i></div>
+                <h3>জাদুকরী রত্নভাণ্ডার</h3>
+                <p>Int, Float, Char, Double ও অন্যান্য ডাটা টাইপের রহস্য ভেদ করো।</p>
+            </a>
+
+            <a href="array.html" class="card">
+                <span class="badge">Level 3</span>
+                <div class="icon-box"><i class="fa-solid fa-list-ol"></i></div>
+                <h3>খেলনার বিশাল ঝুড়ি</h3>
+                <p>একসাথে অনেকগুলো একইরকম জিনিস একটি মাত্র Array ঝুড়িতে সাজিয়ে রাখো।</p>
+            </a>
+
+            <a href="conditional.html" class="card">
+                <span class="badge">Level 4</span>
+                <div class="icon-box"><i class="fa-solid fa-code-fork"></i></div>
+                <h3>রহস্যময় গোলকধাঁধা</h3>
+                <p>যদি, অথবা, না-হলে (If, Else If, Else) এবং Switch দিয়ে সঠিক সিদ্ধান্ত নাও।</p>
+            </a>
+
+            <a href="loop.html" class="card">
+                <span class="badge">Level 5</span>
+                <div class="icon-box"><i class="fa-solid fa-rotate"></i></div>
+                <h3>ঘূর্ণায়মান জাদুর চাকা</h3>
+                <p>For, While এবং Do-While লুপ ব্যবহার করে যেকোনো কাজ নিমেষে বারবার করো।</p>
+            </a>
+
+            <a href="recursion.html" class="card">
+                <span class="badge">Level 6</span>
+                <div class="icon-box"><i class="fa-solid fa-arrows-to-eye"></i></div>
+                <h3>অসীম আয়নার মায়া</h3>
+                <p>Recursive Function দিয়ে একটি ফাংশনের ভেতর থেকে নিজেকেই ডাকার জাদু শেখো।</p>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
