@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লেভেল ১: জাদুর বাক্স (Variable)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #e0f7fa; min-height: 100vh; padding: 30px; display: flex; align-items: center; justify-content: center; }
+        .game-wrapper { display: flex; width: 1200px; height: 680px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); overflow: hidden; }
+        .story-side { flex: 1.2; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-right: 2px solid #f0f0f0; overflow-y: auto; }
+        .code-side { flex: 1; padding: 40px; background: #1e1e24; color: #f8f8f2; display: flex; flex-direction: column; justify-content: space-between; }
+        .level-badge { align-self: flex-start; background: #00acc1; color: white; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; margin-bottom: 20px; }
+        .kodu-avatar { display: flex; align-items: center; gap: 20px; background: #e0f7fa; padding: 20px; border-radius: 20px; margin-bottom: 25px; }
+        .kodu-icon { font-size: 55px; color: #00acc1; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .story-text h2 { color: #2c3e50; margin-bottom: 15px; font-size: 1.8rem; }
+        .story-text p { color: #546e7a; font-size: 1.1rem; line-height: 1.6; }
+        .step-dots { display: flex; gap: 10px; margin: 20px 0; }
+        .dot { width: 15px; height: 15px; border-radius: 50%; background: #e0e0e0; transition: all 0.3s; }
+        .dot.active { background: #00acc1; transform: scale(1.2); }
+        .dot.completed { background: #2ed573; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .code-header h3 { font-size: 1.2rem; color: #ff79c6; }
+        .hint-box { background: #282a36; padding: 12px; border-radius: 8px; font-size: 0.95rem; color: #f1fa8c; border-left: 4px solid #f1fa8c; margin-bottom: 15px; }
+        textarea { width: 100%; flex-grow: 1; background: #282a36; color: #50fa7b; border: 2px solid #44475a; border-radius: 12px; padding: 20px; font-family: 'Courier New', monospace; font-size: 1.2rem; resize: none; outline: none; transition: border 0.3s; }
+        textarea:focus { border-color: #ff79c6; }
+        .btn-container { display: flex; gap: 15px; margin-top: 20px; }
+        button { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-run { background: #2ed573; color: white; }
+        .btn-run:hover { background: #26af5f; }
+        .btn-next { background: #ff9f43; color: white; display: none; }
+        .btn-next:hover { background: #e68a2e; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
+        .feedback.success { background: rgba(46, 213, 115, 0.2); color: #2ed573; border: 1px solid #2ed573; }
+        .feedback.error { background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid #ff4757; }
+        .back-btn { text-decoration: none; color: #78909c; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+        .back-btn:hover { color: #00acc1; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="story-side">
+            <div>
+                <div class="level-badge">লেভেল ১</div>
+                <div class="kodu-avatar">
+                    <div class="kodu-icon"><i class="fa-solid fa-robot"></i></div>
+                    <div id="koduDialogue" style="font-size: 1.1rem; color: #37474f; font-weight: bold;"></div>
+                </div>
+                <div class="story-text">
+                    <h2 id="stepTitle"></h2>
+                    <p id="stepDescription"></p>
+                </div>
+            </div>
+            <div>
+                <div class="step-dots" id="stepDots"></div>
+                <a href="index.html" class="back-btn"><i class="fa-solid fa-house"></i> প্রধান ড্যাশবোর্ডে ফিরে যাও</a>
+            </div>
+        </div>
+
+        <div class="code-side">
+            <div class="code-header">
+                <h3><i class="fa-solid fa-scroll"></i> জাদুর কোড বুক</h3>
+                <span id="stepProgress" style="color: #6272a4; font-weight: bold;">ধাপ ১/৩</span>
+            </div>
+            <div class="hint-box" id="hintBox"></div>
+            <textarea id="codeEditor" spellcheck="false" placeholder="এখানে তোমার কোড লেখো..."></textarea>
+            <div id="feedbackBox" class="feedback"></div>
+            <div class="btn-container">
+                <button class="btn-run" onclick="checkStep()"><i class="fa-solid fa-play"></i> রান করো!</button>
+                <button class="btn-next" id="nextBtn" onclick="nextStep()">পরবর্তী ধাপ <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                "kodu": "মিনু দেখ বনের মধ্যে একটা গুপ্তধনের জাদুর বাক্স! সোনাদানা রাখার আগে আমাদের 'ধরি' কিওয়ার্ড ব্যবহার করে 'চাবি' নামের একটা বাক্স বা ভেরিয়েবল বানাতে হবে এবং তাতে ৫ নম্বর সংখ্যাটা তালা মেরে রাখতে হবে!",
+                "title": "ধাপ ১: জাদুর বাক্স বা চলক তৈরি",
+                "desc": "প্রোগ্রামিংয়ে কোনো তথ্য জমা রাখার পাত্রকে চলক বা Variable বলে। বাংলায় নতুন চলক তৈরি করতে আমরা 'ধরি' ব্যবহার করবো।",
+                "hint": "ধরি চাবি = ৫;",
+                "placeholder": "ধরি চাবি = ৫;"
+            },
+            {
+                "kodu": "আরে মিনু তো একটা দুষ্টু! সে চুপিসারে বাক্সের ভেতরের ৫ সংখ্যাটা সরিয়ে দিয়ে ১০ বসাতে চাইছে। চলো বাক্সের মানটা পরিবর্তন করি!",
+                "title": "ধাপ ২: বাক্সের মান পরিবর্তন (Reassigning Value)",
+                "desc": "একবার বাক্স (Variable) তৈরি করা হয়ে গেলে, পরে আর নতুন করে 'ধরি' লিখতে হয় না। সরাসরি নাম লিখে নতুন মান বসানো যায়।",
+                "hint": "চাবি = ১০;",
+                "placeholder": "চাবি = ১০;"
+            },
+            {
+                "kodu": "ওয়াও! এবার আমরা এই জাদুর বাক্সের চাবি দিয়ে গুপ্তধনের মূল গেটটা খুলে ফেলবো! ফটক খুলতে হলে 'বলো' ফাংশন দিয়ে চাবিটিকে ডাকো!",
+                "title": "ধাপ ৩: বাক্সের তথ্য ব্যবহার করা",
+                "desc": "চলকের ভেতরের মান ব্যবহার করতে চাইলে সরাসরি তার নাম লিখলেই হয়। চলো কোডবুক ব্যবহার করে 'বলো(চাবি);' মন্ত্রটি দিয়ে দরজা খুলে ফেলি!",
+                "hint": "বলো(চাবি);",
+                "placeholder": "বলো(চাবি);"
+            }
+        ];
+
+        let currentStep = 0;
+
+        function loadStep() {
+            const data = steps[currentStep];
+            document.getElementById('koduDialogue').innerText = data.kodu;
+            document.getElementById('stepTitle').innerText = data.title;
+            document.getElementById('stepDescription').innerText = data.desc;
+            document.getElementById('hintBox').innerHTML = "<b>💡 সূত্র:</b> " + data.hint;
+            document.getElementById('codeEditor').value = "";
+            document.getElementById('codeEditor').placeholder = data.placeholder;
+            document.getElementById('stepProgress').innerText = `ধাপ ${currentStep + 1}/${steps.length}`;
+            document.getElementById('feedbackBox').style.display = "none";
+            document.getElementById('nextBtn').style.display = "none";
+            
+            const dotsContainer = document.getElementById('stepDots');
+            dotsContainer.innerHTML = "";
+            for(let i=0; i<steps.length; i++) {
+                let dot = document.createElement('div');
+                dot.className = "dot " + (i === currentStep ? "active" : (i < currentStep ? "completed" : ""));
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function checkStep() {
+            const code = document.getElementById('codeEditor').value.trim();
+            const feedbackBox = document.getElementById('feedbackBox');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if(!code) {
+                feedbackBox.className = "feedback error";
+                feedbackBox.innerText = "❌ আগে খালি জায়গায় তোমার জাদুর মন্ত্রটি লেখো!";
+                feedbackBox.style.display = "block";
+                return;
+            }
+
+            const result = validateCode(currentStep, code);
+            
+            if(result.success) {
+                feedbackBox.className = "feedback success";
+                feedbackBox.innerHTML = "🎉 চমৎকার! " + result.msg;
+                feedbackBox.style.display = "block";
+                nextBtn.style.display = "block";
+                confetti();
+            } else {
+                feedbackBox.className = "feedback error";
+                feedbackBox.innerHTML = "❌ উফ! " + result.msg;
+                feedbackBox.style.display = "block";
+            }
+        }
+
+        function nextStep() {
+            currentStep++;
+            if(currentStep < steps.length) {
+                loadStep();
+            } else {
+                alert("🏆 অভিনন্দন ছোট জাদুকর! তুমি সফলভাবে Variables (চলক) এর ব্যবহার শিখে ফেলেছ!");
+                window.location.href = "datatype.html";
+            }
+        }
+
+        function validateCode(step, code) {
+            const clean = code.replace(/[০0]/g, '0').replace(/[৫5]/g, '5').replace(/[১1]/g, '1');
+            if (step === 0) {
+                if (/ধরি\s+চাবি\s*=\s*5\s*;/.test(clean)) {
+                    return { success: true, msg: "জাদুর বাক্স তৈরি সম্পন্ন! ৫ নম্বর শক্তি লক হয়ে গেছে।" };
+                }
+            } else if (step === 1) {
+                if (/চাবি\s*=\s*10\s*;/.test(clean)) {
+                    return { success: true, msg: "বাক্সের মান বদলে ১০ হয়ে গেছে! মিনু সফল।" };
+                }
+            } else if (step === 2) {
+                if (/বলো\s*\(\s*চাবি\s*\)\s*;?/.test(clean)) {
+                    return { success: true, msg: "চাবির বাক্সের শক্তিতে প্রাসাদের গেট খুলে গেছে!" };
+                }
+            }
+            return { success: false, msg: "মন্ত্র মেলেনি! ব্র্যাকেট, সেমিকোলন বা নামগুলো সূত্রের সাথে মিলিয়ে আবার লেখো।" };
+        }
+
+        loadStep();
+    </script>
+</body>
+</html>
