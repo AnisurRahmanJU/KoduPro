@@ -3,41 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>লেভেল ৪: রহস্যময় গোলকধাঁধা (Conditionals)</title>
+    <title>লেভেল ৪: রহস্যময় গোলকধাঁধা (Conditionals)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Hind Siliguri', sans-serif; background-color: #fff3e0; min-height: 100vh; padding: 30px; display: flex; align-items: center; justify-content: center; }
-        .game-wrapper { display: flex; width: 1200px; height: 680px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); overflow: hidden; }
-        .story-side { flex: 1.2; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border-right: 2px solid #f0f0f0; overflow-y: auto; }
-        .code-side { flex: 1; padding: 40px; background: #1e1e24; color: #f8f8f2; display: flex; flex-direction: column; justify-content: space-between; }
-        .level-badge { align-self: flex-start; background: #ff9800; color: white; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; margin-bottom: 20px; }
-        .kodu-avatar { display: flex; align-items: center; gap: 20px; background: #fff3e0; padding: 20px; border-radius: 20px; margin-bottom: 25px; }
-        .kodu-icon { font-size: 55px; color: #ff9800; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .story-text h2 { color: #2c3e50; margin-bottom: 15px; font-size: 1.8rem; }
-        .story-text p { color: #546e7a; font-size: 1.1rem; line-height: 1.6; }
-        .step-dots { display: flex; gap: 10px; margin: 20px 0; }
-        .dot { width: 15px; height: 15px; border-radius: 50%; background: #e0e0e0; transition: all 0.3s; }
-        .dot.active { background: #ff9800; transform: scale(1.2); }
-        .dot.completed { background: #2ed573; }
-        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .code-header h3 { font-size: 1.2rem; color: #ff79c6; }
-        .hint-box { background: #282a36; padding: 12px; border-radius: 8px; font-size: 0.95rem; color: #f1fa8c; border-left: 4px solid #f1fa8c; margin-bottom: 15px; }
-        textarea { width: 100%; flex-grow: 1; background: #282a36; color: #50fa7b; border: 2px solid #44475a; border-radius: 12px; padding: 20px; font-family: 'Courier New', monospace; font-size: 1.2rem; resize: none; outline: none; transition: border 0.3s; }
-        textarea:focus { border-color: #ff79c6; }
-        .btn-container { display: flex; gap: 15px; margin-top: 20px; }
-        button { flex: 1; padding: 15px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-run { background: #2ed573; color: white; }
-        .btn-run:hover { background: #26af5f; }
-        .btn-next { background: #ff9f43; color: white; display: none; }
-        .btn-next:hover { background: #e68a2e; }
-        .feedback { margin-top: 15px; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
-        .feedback.success { background: rgba(46, 213, 115, 0.2); color: #2ed573; border: 1px solid #2ed573; }
-        .feedback.error { background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid #ff4757; }
-        .back-btn { text-decoration: none; color: #78909c; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
-        .back-btn:hover { color: #ff9800; }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            background-color: #fff3e0; 
+            min-height: 100vh; 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        
+        /* Main Wrapper: মোবাইল ফার্স্ট লেআউট (উপর-নিচে) */
+        .game-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            width: 100%;
+            max-width: 1200px; 
+            background: white; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+        }
+        
+        /* Story Side */
+        .story-side { 
+            flex: 1; 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            border-bottom: 2px solid #f0f0f0; 
+        }
+        
+        /* Code Editor Side */
+        .code-side { 
+            flex: 1; 
+            padding: 25px; 
+            background: #1e1e24; 
+            color: #f8f8f2; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+        }
+        
+        .level-badge { 
+            align-self: flex-start; 
+            background: #ff9800; 
+            color: white; 
+            padding: 6px 16px; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+            margin-bottom: 15px; 
+        }
+        
+        .kodu-avatar { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            background: #fff3e0; 
+            padding: 15px; 
+            border-radius: 20px; 
+            margin-bottom: 20px; 
+        }
+        
+        .kodu-icon { 
+            font-size: 40px; 
+            color: #ff9800; 
+            animation: bounce 2s infinite; 
+            flex-shrink: 0;
+        }
+        
+        @keyframes bounce { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+        
+        .story-text h2 { 
+            color: #2c3e50; 
+            margin-bottom: 10px; 
+            font-size: 1.5rem; 
+            line-height: 1.4;
+        }
+        
+        .story-text p { 
+            color: #546e7a; 
+            font-size: 1rem; 
+            line-height: 1.6; 
+        }
+        
+        .step-dots { 
+            display: flex; 
+            gap: 10px; 
+            margin: 20px 0 15px 0; 
+        }
+        
+        .dot { 
+            width: 12px; 
+            height: 12px; 
+            border-radius: 50%; 
+            background: #e0e0e0; 
+            transition: all 0.3s; 
+        }
+        
+        .dot.active { 
+            background: #ff9800; 
+            transform: scale(1.2); 
+        }
+        
+        .dot.completed { 
+            background: #2ed573; 
+        }
+        
+        .code-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        
+        .code-header h3 { 
+            font-size: 1.1rem; 
+            color: #ff79c6; 
+        }
+        
+        .hint-box { 
+            background: #282a36; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            color: #f1fa8c; 
+            border-left: 4px solid #f1fa8c; 
+            margin-bottom: 15px; 
+        }
+        
+        textarea { 
+            width: 100%; 
+            min-height: 120px; 
+            background: #282a36; 
+            color: #50fa7b; 
+            border: 2px solid #44475a; 
+            border-radius: 12px; 
+            padding: 15px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 1.1rem; 
+            resize: none; 
+            outline: none; 
+            transition: border 0.3s; 
+            margin-bottom: 15px;
+        }
+        
+        textarea:focus { 
+            border-color: #ff79c6; 
+        }
+        
+        .btn-container { 
+            display: flex; 
+            gap: 12px; 
+        }
+        
+        button { 
+            flex: 1; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+        }
+        
+        .btn-run { 
+            background: #2ed573; 
+            color: white; 
+        }
+        
+        .btn-run:hover { 
+            background: #26af5f; 
+        }
+        
+        .btn-next { 
+            background: #ff9f43; 
+            color: white; 
+            display: none; 
+        }
+        
+        .btn-next:hover { 
+            background: #e68a2e; 
+        }
+        
+        .feedback { 
+            margin-bottom: 15px; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 0.95rem;
+            display: none; 
+        }
+        
+        .feedback.success { 
+            background: rgba(46, 213, 115, 0.2); 
+            color: #2ed573; 
+            border: 1px solid #2ed573; 
+        }
+        
+        .feedback.error { 
+            background: rgba(255, 71, 87, 0.2); 
+            color: #ff4757; 
+            border: 1px solid #ff4757; 
+        }
+        
+        .back-btn { 
+            text-decoration: none; 
+            color: #78909c; 
+            font-weight: bold; 
+            font-size: 0.95rem;
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            transition: color 0.2s; 
+        }
+        
+        .back-btn:hover { 
+            color: #ff9800; 
+        }
+
+        /* -----------------------------------------
+           MEDIA QUERIES: ডেস্কটপ ও বড় স্ক্রিনের জন্য
+        ----------------------------------------- */
+        @media (min-width: 768px) {
+            body {
+                padding: 30px;
+            }
+            
+            .game-wrapper { 
+                flex-direction: row; 
+                height: 680px; 
+            }
+            
+            .story-side { 
+                flex: 1.2; 
+                padding: 40px; 
+                border-right: 2px solid #f0f0f0; 
+                border-bottom: none;
+                overflow-y: auto; 
+            }
+            
+            .code-side { 
+                flex: 1; 
+                padding: 40px; 
+                overflow-y: auto;
+            }
+            
+            .kodu-icon {
+                font-size: 55px;
+            }
+            
+            .story-text h2 { 
+                font-size: 1.8rem; 
+            }
+            
+            .story-text p { 
+                font-size: 1.1rem; 
+            }
+            
+            textarea {
+                flex-grow: 1;
+                min-height: auto;
+                font-size: 1.2rem;
+                margin-bottom: 0;
+            }
+            
+            .feedback {
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+            
+            .btn-container {
+                margin-top: 20px;
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
@@ -63,16 +323,22 @@
         </div>
 
         <div class="code-side">
-            <div class="code-header">
-                <h3><i class="fa-solid fa-scroll"></i> জাদুর কোড বুক</h3>
-                <span id="stepProgress" style="color: #6272a4; font-weight: bold;">ধাপ ১/৪</span>
+            <div>
+                <div class="code-header">
+                    <h3><i class="fa-solid fa-scroll"></i> জাদুর কোড বুক</h3>
+                    <span id="stepProgress" style="color: #6272a4; font-weight: bold;">ধাপ ১/৪</span>
+                </div>
+                <div class="hint-box" id="hintBox"></div>
             </div>
-            <div class="hint-box" id="hintBox"></div>
+            
             <textarea id="codeEditor" spellcheck="false" placeholder="এখানে তোমার কোড লেখো..."></textarea>
-            <div id="feedbackBox" class="feedback"></div>
-            <div class="btn-container">
-                <button class="btn-run" onclick="checkStep()"><i class="fa-solid fa-play"></i> রান করো!</button>
-                <button class="btn-next" id="nextBtn" onclick="nextStep()">পরবর্তী ধাপ <i class="fa-solid fa-arrow-right"></i></button>
+            
+            <div>
+                <div id="feedbackBox" class="feedback"></div>
+                <div class="btn-container">
+                    <button class="btn-run" onclick="checkStep()"><i class="fa-solid fa-play"></i> রান করো!</button>
+                    <button class="btn-next" id="nextBtn" onclick="nextStep()">পরবর্তী ধাপ <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
         </div>
     </div>
@@ -80,22 +346,22 @@
     <script>
         const steps = [
             {
-                "kodu": "সামনে ড্রাগনের গুহা! যদি আমাদের চাবি 'সোনার' হয়, তবেই গেট খুলবে। চলো 'যদি' (If) শর্ত লিখে ট্রাই করি!",
+                "kodu": "সামনে ড্রাগনের গুহা! যদি আমাদের চাবি 'সোনার' হয়, তবেই গেট খুলবে। চলো 'যদি' (If) শর্ত লিখে ট্রাই করি!",
                 "title": "ধাপ ১: যদি শর্ত (If Condition)",
-                "desc": "যদি চাবি == 'সোনার' হয় তবে বলো('খোলো'); মন্ত্র দাও।",
+                "desc": "যদি চাবি == 'সোনার' হয় তবে বলো('খোলো'); মন্ত্র দাও।",
                 "hint": "যদি (চাবি == 'সোনার') { বলো('খোলো'); }",
                 "placeholder": "যদি (চাবি == 'সোনার') { বলো('খোলো'); }"
             },
             {
-                "kodu": "যদি সোনার চাবি না হয়ে রূপার চাবি হয়, তবে অন্য গেট খুলবে। অর্থাৎ 'নাহলে-যদি' (Else If) এর ব্যবহার!",
+                "kodu": "যদি সোনার চাবি না হয়ে রূপার চাবি হয়, তবে অন্য গেট খুলবে। অর্থাৎ 'নাহলে-যদি' (Else If) এর ব্যবহার!",
                 "title": "ধাপ ২: নাহলে-যদি শর্ত (Else If)",
-                "desc": "নাহলে_যদি (চাবি == 'রূপার') হয় তবে বলো('অর্ধেক-খোলো'); করো।",
+                "desc": "নাহলে_যদি (চাবি == 'রূপার') হয় তবে বলো('অর্ধেক-খোলো'); করো।",
                 "hint": "নাহলে_যদি (চাবি == 'রূপার') { বলো('অর্ধেক-খোলো'); }",
                 "placeholder": "নাহলে_যদি (চাবি == 'রূপার') { বলো('অর্ধেক-খোলো'); }"
             },
             {
                 "kodu": "যদি কোনো চাবিই না মেলে, তবে তো বিপদ! তখন শেষ ভরসা 'নাহলে' (Else) ব্লক।",
-                "title": "ধাপ ৩: অন্যথায় বা নাহলে (Else)",
+                "title": "ধাপ ৩: অন্যথায় বা নাহলে (Else)",
                 "desc": "সব শর্ত ব্যর্থ হলে 'নাহলে' কাজ করে। নাহলে { বলো('আটকা'); } লেখো।",
                 "hint": "নাহলে { বলো('আটকা'); }",
                 "placeholder": "নাহলে { বলো('আটকা'); }"
@@ -139,7 +405,7 @@
             
             if(!code) {
                 feedbackBox.className = "feedback error";
-                feedbackBox.innerText = "❌ আগে খালি জায়গায় তোমার জাদুর মন্ত্রটি লেখো!";
+                feedbackBox.innerText = "❌ আগে খালি জায়গায় তোমার জাদুর মন্ত্রটি লেখো!";
                 feedbackBox.style.display = "block";
                 return;
             }
@@ -164,22 +430,22 @@
             if(currentStep < steps.length) {
                 loadStep();
             } else {
-                alert("🏆 সাবাস মাস্টার! তুমি কন্ডিশনাল লজিকের রাজা হয়ে গেছ!");
+                alert("🏆 সাবাস মাস্টার! তুমি কন্ডিশনাল লজিকের রাজা হয়ে গেছ!");
                 window.location.href = "loop.html";
             }
         }
 
         function validateCode(step, code) {
             if (step === 0) {
-                if (/যদি\s*\(\s*চাবি\s*==\s*['"]সোনার['"]\s*\)\s*\{\s*বলো\s*\(\s*['"]খোলো['"]\s*\)\s*;?\s*\}/.test(code)) return { success: true, msg: "গেটের লক নড়ে উঠেছে!" };
+                if (/যদি\s*\(\s*চাবি\s*==\s*['"]সোনার['"]\s*\)\s*\{\s*বলো\s*\(\s*['"]খোলো['"]\s*\)\s*;?\s*\}/.test(code)) return { success: true, msg: "গেটের লক নড়ে উঠেছে!" };
             } else if (step === 1) {
                 if (/নাহলে_যদি\s*\(\s*চাবি\s*==\s*['"]রূপার['"]\s*\)\s*\{\s*বলো\s*\(\s*['"]অর্ধেক-খোলো['"]\s*\)\s*;?\s*\}/.test(code)) return { success: true, msg: "রূপার গেট আনলকড!" };
             } else if (step === 2) {
-                if (/নাহলে\s*\{\s*বলো\s*\(\s*['"]আটকা['"]\s*\)\s*;?\s*\}/.test(code)) return { success: true, msg: "নিরাপত্তা ব্যবস্থা সক্রিয়!" };
+                if (/নাহলে\s*\{\s*বলো\s*\(\s*['"]আটকা['"]\s*\)\s*;?\s*\}/.test(code)) return { success: true, msg: "নিরাপত্তা ব্যবস্থা সক্রিয়!" };
             } else if (step === 3) {
                 if (/সুইচ\s*\(\s*রঙ\s*\)\s*\{\s*কেস\s*['"]লাল['"]\s*:\s*বলো\s*\(\s*['"]থামো['"]\s*\)\s*;\s*বিরতি\s*;\s*\}/.test(code)) return { success: true, msg: "সুইচ কেস সফলভাবে কাজ করেছে!" };
             }
-            return { success: false, msg: "লজিক বা ব্র্যাকেটে ভুল হয়েছে। সূত্রের সাথে মেলাও!" };
+            return { success: false, msg: "লজিক বা ব্র্যাকেটে ভুল হয়েছে। সূত্রের সাথে মেলাও!" };
         }
 
         loadStep();
