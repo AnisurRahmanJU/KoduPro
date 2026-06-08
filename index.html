@@ -6,20 +6,23 @@
     <title>কোডুর জাদুর জগত - ছোটদের প্রোগ্রামিং প্ল্যাটফর্ম</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&family=Galada&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Galada&display=swap');
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Hind Siliguri', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4ecf7 100%);
             min-height: 100vh;
-            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
             color: #2c3e50;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             text-align: center;
+            padding: 40px 20px;
+            flex: 1;
         }
         .header {
             font-family: 'Galada', cursive;
@@ -33,18 +36,33 @@
             color: #616161;
             margin-bottom: 50px;
         }
+        
+        /* 1 লাইনে ৩টি লেভেল রাখার জন্য গ্রিড আপডেট */
         .map-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr); /* এক লাইনে ফিক্সড ৩টি কলাম */
             gap: 30px;
             padding: 10px;
             margin-bottom: 50px;
         }
+        
+        /* রেসপনসিভ: ছোট স্ক্রিন বা ট্যাবলেটের জন্য অ্যাডজাস্টমেন্ট */
+        @media (max-width: 992px) {
+            .map-grid {
+                grid-template-columns: repeat(2, 1fr); /* মাঝারি স্ক্রিনে ২টি */
+            }
+        }
+        @media (max-width: 650px) {
+            .map-grid {
+                grid-template-columns: 1fr; /* মোবাইলে ১টি করে */
+            }
+        }
+
         .card {
             background: white;
             border-radius: 24px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            padding: 30px 20px;
+            padding: 35px 20px;
             text-decoration: none;
             color: inherit;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -104,12 +122,12 @@
             color: white;
         }
 
-        /* Advanced Code Runner Section (Bottom Center) */
+        /* Advanced Code Runner Section */
         .runner-section {
             display: flex;
             justify-content: center;
             margin-top: 40px;
-            padding: 0 20px;
+            margin-bottom: 40px;
         }
         .runner-card {
             background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
@@ -148,7 +166,6 @@
             font-size: 1.8rem;
             margin-bottom: 10px;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
         .runner-card p {
             font-size: 1.05rem;
@@ -168,10 +185,74 @@
             gap: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.4); }
             70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 235, 59, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 235, 59, 0); }
+        }
+
+        /* Beautiful Footer */
+        footer {
+            background: #1a0633;
+            color: #b39ddb;
+            padding: 40px 20px 20px 20px;
+            text-align: center;
+            font-size: 1rem;
+            border-top: 4px solid #7b1fa2;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-family: 'Galada', cursive;
+            font-size: 2rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(123, 31, 162, 0.5);
+        }
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .footer-link {
+            color: #e1bee7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .footer-link:hover {
+            color: #fff;
+            background: #7b1fa2;
+            transform: translateY(-3px);
+        }
+        .footer-dev {
+            color: #fff;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .footer-divider {
+            width: 100%;
+            max-width: 300px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+        }
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: #8e24aa;
         }
     </style>
 </head>
@@ -179,7 +260,7 @@
 
     <div class="container">
         <h1 class="header">কোডুর জাদুর জগত ✨</h1>
-        <p class="subtitle">গল্পে গল্পে শেখো নিজের ভাষায় অ্যাডভান্সড কোডিং!</p>
+        <p class="subtitle">গল্পে গল্পে কার্টুনের সাথে শেখো নিজের ভাষায় অ্যাডভান্সড কোডিং!</p>
 
         <div class="map-grid">
             <a href="variable.html" class="card">
@@ -206,8 +287,8 @@
             <a href="conditional.html" class="card">
                 <span class="badge">Level 4</span>
                 <div class="icon-box"><i class="fa-solid fa-code-fork"></i></div>
-                <h3>রহмяময় গোলকধাঁধা</h3>
-                <p>যদি, অথবা, না-হলে (If, Else If, Else) এবং Switch দিয়ে সঠিক সিদ্ধান্ত নাও।</p>
+                <h3>রহম্যময় গোলকধাঁধা</h3>
+                <p>যদি, অথবা, না-হলে (If, Else If, Else) এবং Switch দিয়ে সঠিক সিদ্ধান্ত নাও。</p>
             </a>
 
             <a href="loop.html" class="card">
@@ -230,7 +311,7 @@
                 <div class="runner-icon">
                     <i class="fa-solid fa-terminal"></i>
                 </div>
-                <h2>বাংলা কোড রানার 🚀</h2>
+                <h2>বাংলা কোড运行ার 🚀</h2>
                 <p>গল্পের জগত তো শেষ হলো! এবার সময় এসেছে নিজের তৈরি সম্পূর্ণ স্বাধীন বাংলা কোড রান করার। প্রবেশ করো আসল কোডিং ল্যাবে!</p>
                 <div class="runner-btn">
                     অ্যাডভান্সড ল্যাবে চলো <i class="fa-solid fa-circle-arrow-right"></i>
@@ -238,6 +319,30 @@
             </a>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">কোডুর জাদুর জগত</div>
+            
+            <div class="footer-links">
+                <a href="https://bangla-pro-langs.vercel.app/" target="_blank" class="footer-link">
+                    <i class="fa-solid fa-language"></i> বাংলা প্রোগ্রামিং ল্যাঙ্গুয়েজ
+                </a>
+                <a href="https://github.com/AnisurRahmanJU" target="_blank" class="footer-link">
+                    <i class="fa-brands fa-github"></i> গিটহাব প্রোফাইল
+                </a>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <p class="footer-dev">
+                ডিজাইন ও ডেভেলপমেন্টে: <span style="color: #ffeb3b;">Md. Anisur Rahman</span>
+            </p>
+            <p class="footer-copyright">
+                &copy; 2026 কোডুর জাদুর জগত। সর্বস্বত্ব সংরক্ষিত।
+            </p>
+        </div>
+    </footer>
 
 </body>
 </html>
